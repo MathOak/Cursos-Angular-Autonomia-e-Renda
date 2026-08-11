@@ -1,9 +1,8 @@
 <div class="produto">
- @for (item of produtos; track item) {
- <h2>{{ item.nome | captalize}}</h2>
- @if(mostrarpreco){
- <p>Preço: {{ item.preco |precoFormatado }}</p>
- }
- }
- <p>COISA NOVA</p>
+ <h3>{{ nome }}</h3>
+ <p>{{ preco | currency }}</p>
+<button (click)="selecionarProduto()">  
+    Selecionar {{ nome }}
+</button>
+
 </div>
