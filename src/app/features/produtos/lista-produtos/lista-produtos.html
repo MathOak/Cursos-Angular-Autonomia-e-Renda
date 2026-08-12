@@ -1,8 +1,6 @@
-@for (item of produtos; track item.nome) {
-    <app-produto
-        [nome]="item.nome"
-        [preco]="item.preco"
-        (produtoSelecionado)="exibirProduto($event)"
-    >
-    </app-produto>
+@for (item of produtos(); track item.nome) {
+  <app-produto [nome]="item.nome" [preco]="item.preco" (produtoSelecionado)="exibirProduto($event)">
+  </app-produto>
 }
+
+<button (click)="adicionarProduto()">Adicionar Produto</button>
