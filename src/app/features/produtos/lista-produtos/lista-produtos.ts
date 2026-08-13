@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, effect } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
 
@@ -9,12 +9,24 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
+  constructor() {
+    effect(() => {
+      console.log('A lista de produtos foi alterada: ', this.produtos());
+    });
+    effect(() => {
+      console.log('O valor atualizado: ', this.valorTotal());
+    });
+    effect(() => {
+      document.title = `(${this.totalProdutos()}) da Minha Loja`;
+    });
+  }
   produtos = signal<
     {
       nome: string;
       preco: number;
     }[]
   >([]);
+  produtoSelecionado = signal<string | null>(null);
 
   totalProdutos = computed(() => this.produtos().length);
   valorTotal = computed(() => {
@@ -63,6 +75,7 @@ export class ListaProdutos {
   }
 
   exibirProduto(nome: string) {
+    this.produtoSelecionado.set(nome);
     console.log('Produto selecionado é ' + nome);
   }
 

@@ -1,5 +1,13 @@
 <h2>Total de Produtos: {{ totalProdutos() }}</h2>
-<h2>Total em valor de produtos: {{ valorTotal() | currency}}</h2>
+<h2>Total em valor de produtos: {{ valorTotal() | currency }}</h2>
+<h2>
+  Produto Selecionado:
+  @if (produtoSelecionado()) {
+    <strong style="color: green">{{ produtoSelecionado() }}</strong>
+  } @else {
+    <strong style="color: gray">Nenhum</strong>
+  }
+</h2>
 
 @for (item of produtos(); track item.nome) {
   <app-produto [nome]="item.nome" [preco]="item.preco" (produtoSelecionado)="exibirProduto($event)">
