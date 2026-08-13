@@ -65,4 +65,26 @@ export class ListaProdutos {
   exibirProduto(nome: string) {
     console.log('Produto selecionado é ' + nome);
   }
+
+  substituirProduto() {
+    // Desafio, atualizar somente o valor do item "notebook" sem alterar os valores de outros items
+    /* Utilizar a função "map" do javascript para percorrer a lista
+    de produtos atuais, e verificar o item com nome notebook e fazer
+    a alteração de valor */
+    const novaLista = this.produtos().map((item) => {
+      /* Verificando cada item da lista, caso o item tenha o 
+      nome diferente de notebook ele retorna o item sem alteração */
+      if (item.nome !== 'notebook') return item;
+
+      /* Caso o item tenha o nome igual a 'notebook' ele altera o
+      valor de preço e retorna o item novo com o valor alterado */
+      return {
+        ...item,
+        preco: 4000,
+      };
+    });
+
+    /* Altera a lista antiga de produtos, com a nova lista */
+    this.produtos.set(novaLista);
+  }
 }
