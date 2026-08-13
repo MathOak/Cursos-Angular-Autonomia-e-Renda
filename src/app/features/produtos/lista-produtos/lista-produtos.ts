@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { Produto } from '../produto/produto';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto],
+  imports: [Produto, CurrencyPipe],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
@@ -14,6 +15,12 @@ export class ListaProdutos {
       preco: number;
     }[]
   >([]);
+
+  totalProdutos = computed(() => this.produtos().length);
+  valorTotal = computed(() => {
+    return this.produtos().reduce((total, item) => total + item.preco, 5);
+  });
+
   produtosNovos = [
     { nome: 'notebook', preco: 3500 },
     { nome: 'mouse', preco: 150 },

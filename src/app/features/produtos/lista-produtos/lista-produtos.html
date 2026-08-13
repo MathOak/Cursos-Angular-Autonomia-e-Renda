@@ -1,3 +1,6 @@
+<h2>Total de Produtos: {{ totalProdutos() }}</h2>
+<h2>Total em valor de produtos: {{ valorTotal() | currency}}</h2>
+
 @for (item of produtos(); track item.nome) {
   <app-produto [nome]="item.nome" [preco]="item.preco" (produtoSelecionado)="exibirProduto($event)">
   </app-produto>
