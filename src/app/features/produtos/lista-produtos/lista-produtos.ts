@@ -21,17 +21,12 @@ export class ListaProdutos {
     });
   }
   produtos = signal<{ nome: string; preco: number }[]>([]);
-  carrinho = signal<{ nome: string; preco: number }[]>([]);
   produtoSelecionado = signal<string | null>(null);
 
   totalProdutos = computed(() => this.produtos().length);
   valorTotal = computed(() => {
     return this.produtos().reduce((total, item) => total + item.preco, 5);
   });
-  quantidadeCarrinho = computed(() => this.carrinho().length);
-  totalCarrinho = computed(()=> 
-    this.carrinho().reduce((total, item)=>total + item.preco, 0)
-)
 
   produtosNovos = [
     { nome: 'notebook', preco: 3500 },
@@ -73,9 +68,6 @@ export class ListaProdutos {
       /* Caso contrario, não faço nada */
     }
   }
-  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
-    this.carrinho.update((listaCarrinhoAtual) => [...listaCarrinhoAtual, produto]);
-  }
 
   exibirProduto(nome: string) {
     this.produtoSelecionado.set(nome);
@@ -102,5 +94,12 @@ export class ListaProdutos {
 
     /* Altera a lista antiga de produtos, com a nova lista */
     this.produtos.set(novaLista);
+  }
+
+  carrinho = signal<{ nome: string; preco: number }[]>([]);
+  quantidadeCarrinho = computed(() => this.carrinho().length);
+  totalCarrinho = computed(() => this.carrinho().reduce((total, item) => total + item.preco, 0));
+  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
+    this.carrinho.update((listaCarrinhoAtual) => [...listaCarrinhoAtual, produto]);
   }
 }
