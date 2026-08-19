@@ -1,6 +1,7 @@
 import { Component, signal, computed, effect } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -9,7 +10,9 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
-  constructor() {
+  constructor(private http: HttpClient) {
+    this.carregarProdutos();
+
     effect(() => {
       console.log('A lista de produtos foi alterada: ', this.produtos());
     });
@@ -20,6 +23,7 @@ export class ListaProdutos {
       document.title = `(${this.totalProdutos()}) da Minha Loja`;
     });
   }
+  carregando = signal(true);
   produtos = signal<{ nome: string; preco: number }[]>([]);
   produtoSelecionado = signal<string | null>(null);
 
@@ -33,6 +37,29 @@ export class ListaProdutos {
     { nome: 'mouse', preco: 150 },
     { nome: 'teclado', preco: 250.55 },
   ];
+
+  carregarProdutos() {
+    /* 
+     Modificando variavel carregando para 
+     informar que estou iniciando uma busca na API 
+    */
+    this.carregando.set(true);
+
+    this.http
+      .get<{ title: string; price: number; image: string }[]>('https://fakestoreapi.com/products')
+      .subscribe({
+        next: (dados) => {
+          // Adaptação da API para o nosso projeto
+          const produtosFormatados = dados.map((p) => ({
+            nome: p.title,
+            preco: p.price,
+          }));
+          this.produtos.set(produtosFormatados);
+          this.carregando.set(false); // finaliza loading
+        },
+        error: () => {},
+      });
+  }
 
   filtrarNovoProduto() {
     /* Esta função irá filtar a lista atual de produtos 
