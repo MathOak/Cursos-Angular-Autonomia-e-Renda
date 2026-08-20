@@ -1,7 +1,9 @@
-import { Component, signal, computed, effect } from '@angular/core';
+import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { ProdutosService } from '../produtos.services';
+
+type ProdutoType = { nome: string; preco: number };
 
 @Component({
   selector: 'app-lista-produtos',
@@ -10,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
-  constructor(private http: HttpClient) {
+  constructor() {
     this.carregarProdutos();
 
     effect(() => {
@@ -23,8 +25,9 @@ export class ListaProdutos {
       document.title = `(${this.totalProdutos()}) da Minha Loja`;
     });
   }
+  private produtosService = inject(ProdutosService);
   carregando = signal(true);
-  produtos = signal<{ nome: string; preco: number }[]>([]);
+  produtos = signal<ProdutoType[]>([]);
   produtoSelecionado = signal<string | null>(null);
 
   totalProdutos = computed(() => this.produtos().length);
@@ -45,20 +48,17 @@ export class ListaProdutos {
     */
     this.carregando.set(true);
 
-    this.http
-      .get<{ title: string; price: number; image: string }[]>('https://fakestoreapi.com/products')
-      .subscribe({
-        next: (dados) => {
-          // Adaptação da API para o nosso projeto
-          const produtosFormatados = dados.map((p) => ({
-            nome: p.title,
-            preco: p.price,
-          }));
-          this.produtos.set(produtosFormatados);
-          this.carregando.set(false); // finaliza loading
-        },
-        error: () => {},
-      });
+    this.produtosService.buscarProdutos().subscribe({
+      next: (dados) => {
+        const produtos = this.produtosService.transformarProdutos(dados);
+        this.produtos.set(produtos);
+        this.carregando.set(false);
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar produtos:', erro);
+        this.carregando.set(false);
+      },
+    });
   }
 
   filtrarNovoProduto() {
@@ -86,7 +86,7 @@ export class ListaProdutos {
   }
 
   adicionarProduto() {
-    let novoproduto: { nome: string; preco: number } | null = this.filtrarNovoProduto();
+    let novoproduto: ProdutoType | null = this.filtrarNovoProduto();
 
     /* Caso a minha função retorne um item novo, eu adiciono na lista */
     if (novoproduto) {
@@ -123,10 +123,10 @@ export class ListaProdutos {
     this.produtos.set(novaLista);
   }
 
-  carrinho = signal<{ nome: string; preco: number }[]>([]);
+  carrinho = signal<ProdutoType[]>([]);
   quantidadeCarrinho = computed(() => this.carrinho().length);
   totalCarrinho = computed(() => this.carrinho().reduce((total, item) => total + item.preco, 0));
-  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
+  adicionarAoCarrinho(produto: ProdutoType) {
     this.carrinho.update((listaCarrinhoAtual) => [...listaCarrinhoAtual, produto]);
   }
 }
