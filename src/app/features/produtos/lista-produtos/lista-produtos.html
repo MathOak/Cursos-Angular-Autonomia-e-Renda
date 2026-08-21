@@ -27,7 +27,9 @@
         (produtoSelecionado)="exibirProduto($event)"
       >
       </app-produto>
-      <button (click)="adicionarAoCarrinho(item)">Adicionar ao Carrinho</button>
+      <button mat-raised-button color="primary" (click)="adicionarAoCarrinho(item)">
+        Adicionar ao Carrinho
+      </button>
     }
 
     <!-- <button (click)="adicionarProduto()">Adicionar Produto</button>

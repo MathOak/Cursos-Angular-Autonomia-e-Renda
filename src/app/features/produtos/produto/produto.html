@@ -1,8 +1,15 @@
-<div class="produto">
- <h3>{{ nome }}</h3>
- <p>{{ preco | currency }}</p>
-<button (click)="selecionarProduto()">  
-    Selecionar {{ nome }}
-</button>
+<mat-card class="produto">
+  <mat-card-header>
+    <mat-card-title>{{ nome }}</mat-card-title>
+  </mat-card-header>
 
-</div>
+  <mat-card-content>
+    <p>{{ preco | currency: 'BRL' }}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-stroked-button (click)="selecionarProduto()">
+      Selecionar {{ nome }}
+    </button>
+  </mat-card-actions>
+</mat-card>

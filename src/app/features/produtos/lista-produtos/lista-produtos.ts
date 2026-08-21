@@ -2,12 +2,13 @@ import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
 import { ProdutosService } from '../produtos.services';
+import { MatButtonModule } from '@angular/material/button';
 
 type ProdutoType = { nome: string; preco: number };
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, CurrencyPipe],
+  imports: [Produto, CurrencyPipe, MatButtonModule],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
