@@ -27,6 +27,7 @@ export class ListaProdutos {
   }
   private produtosService = inject(ProdutosService);
   carregando = signal(true);
+  error = signal<string | null>(null);
   produtos = signal<ProdutoType[]>([]);
   produtoSelecionado = signal<string | null>(null);
 
@@ -42,6 +43,7 @@ export class ListaProdutos {
   ];
 
   carregarProdutos() {
+    this.error.set(null);
     /* 
      Modificando variavel carregando para 
      informar que estou iniciando uma busca na API 
@@ -56,6 +58,7 @@ export class ListaProdutos {
       },
       error: (erro) => {
         console.error('Erro ao carregar produtos:', erro);
+        this.error.set('Erro ao carregar produtos. Verifique sua conexão e tente novamente.');
         this.carregando.set(false);
       },
     });
