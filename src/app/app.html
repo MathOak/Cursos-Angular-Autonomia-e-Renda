@@ -1,9 +1,11 @@
-
 <app-header></app-header>
-<button (click)="login()">Logar</button>
-<button (click)="logout()">Deslogar</button>
-<p>Meu usuario esta: {{ usuarioLogado() }}</p>
 
-<hr />
+<main class="classe-principal">
+  <section class="bloco-controle">
+    <button (click)="login()">Logar</button>
+    <button (click)="logout()">Deslogar</button>
+    <p>Meu usuario esta: {{ usuarioLogado() }}</p>
+  </section>
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+</main>

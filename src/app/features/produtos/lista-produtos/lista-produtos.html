@@ -19,16 +19,17 @@
         <span style="color: gray">Nenhum</span>
       }
     </h2>
-
-    @for (item of produtos(); track item.nome) {
-      <app-produto
-        [nome]="item.nome"
-        [preco]="item.preco"
-        (produtoSelecionado)="exibirProduto($event)"
-        (adicionarProdutoAoCarrinho)="adicionarAoCarrinho($event)"
-      >
-      </app-produto>
-    }
+    <section class="grid-produtos">
+      @for (item of produtos(); track item.nome) {
+        <app-produto
+          [nome]="item.nome"
+          [preco]="item.preco"
+          (produtoSelecionado)="exibirProduto($event)"
+          (adicionarProdutoAoCarrinho)="adicionarAoCarrinho($event)"
+        >
+        </app-produto>
+      }
+    </section>
 
     <!-- <button (click)="adicionarProduto()">Adicionar Produto</button>
   <button (click)="substituirProduto()">Substituir Produto</button> -->
