@@ -38,7 +38,7 @@
 <hr />
 <section>
   <h2>Carrinho:</h2>
-  @for (item of carrinho(); track $index) {
+  @for (item of carrinhoService.itens(); track $index) {
     <p>{{ item.nome }} - {{ item.preco | currency: 'BRL' }}</p>
   }
   <p><strong>Itens no Carrinho:</strong> {{ quantidadeCarrinho() }}</p>

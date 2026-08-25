@@ -1,7 +1,8 @@
 import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
-import { ProdutosService } from '../produtos.services';
+import { ProdutosService } from '../../../core/services/produtos.services';
+import { CarrinhoService } from '../../../core/services/carrinho.services';
 import { MatButtonModule } from '@angular/material/button';
 
 type ProdutoType = { nome: string; preco: number };
@@ -27,10 +28,13 @@ export class ListaProdutos {
     });
   }
   private produtosService = inject(ProdutosService);
+  carrinhoService = inject(CarrinhoService);
   carregando = signal(true);
   error = signal<string | null>(null);
   produtos = signal<ProdutoType[]>([]);
   produtoSelecionado = signal<string | null>(null);
+  quantidadeCarrinho = this.carrinhoService.quantidade;
+  totalCarrinho = this.carrinhoService.total;
 
   totalProdutos = computed(() => this.produtos().length);
   valorTotal = computed(() => {
@@ -42,6 +46,10 @@ export class ListaProdutos {
     { nome: 'mouse', preco: 150 },
     { nome: 'teclado', preco: 250.55 },
   ];
+
+  adicionarAoCarrinho(produto: ProdutoType) {
+    this.carrinhoService.adicionar(produto);
+  }
 
   carregarProdutos() {
     this.error.set(null);
@@ -59,7 +67,9 @@ export class ListaProdutos {
       },
       error: (erro) => {
         console.error('Erro ao carregar produtos:', erro);
-        this.error.set('Erro ao carregar produtos. Verifique sua conexão e tente novamente.');
+        this.error.set(
+          'Erro ao carregar produtos. Verifique sua conexão e tente novamente.',
+        );
         this.carregando.set(false);
       },
     });
@@ -125,12 +135,5 @@ export class ListaProdutos {
 
     /* Altera a lista antiga de produtos, com a nova lista */
     this.produtos.set(novaLista);
-  }
-
-  carrinho = signal<ProdutoType[]>([]);
-  quantidadeCarrinho = computed(() => this.carrinho().length);
-  totalCarrinho = computed(() => this.carrinho().reduce((total, item) => total + item.preco, 0));
-  adicionarAoCarrinho(produto: ProdutoType) {
-    this.carrinho.update((listaCarrinhoAtual) => [...listaCarrinhoAtual, produto]);
   }
 }
