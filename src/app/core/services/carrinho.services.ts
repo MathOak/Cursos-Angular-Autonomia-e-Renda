@@ -16,6 +16,7 @@ export class CarrinhoService {
   public total = computed(() =>
     this.carrinho().reduce((total, item) => total + item.preco, 0),
   );
+  carrinhoVazio = computed(() => this.carrinho().length === 0);
   // ACTIONS
   public adicionar(produto: CarrinhoType) {
     this.carrinho.update((lista) => [...lista, produto]);
