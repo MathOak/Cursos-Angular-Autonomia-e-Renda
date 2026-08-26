@@ -1,0 +1,9 @@
+.carrinho-itens {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.carrinho-button {
+  height: 2rem;
+  width: 2rem;
+}

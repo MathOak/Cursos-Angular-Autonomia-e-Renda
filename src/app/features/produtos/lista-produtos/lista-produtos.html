@@ -1,0 +1,34 @@
+@if (carregando()) {
+  <p>Carregando produtos...</p>
+}
+@if (error()) {
+  <p style="color: red">
+    {{ error() }}
+  </p>
+  <button (click)="carregarProdutos()">Tentar novamente</button>
+}
+@if (!carregando() && !error()) {
+  <section>
+    <h2>Total de Produtos: {{ totalProdutos() }}</h2>
+    <h2>Total em valor de produtos: {{ valorTotal() | currency }}</h2>
+    <h2>
+      Produto Selecionado:
+      @if (produtoSelecionado()) {
+        <strong style="color: green">{{ produtoSelecionado() }}</strong>
+      } @else {
+        <span style="color: gray">Nenhum</span>
+      }
+    </h2>
+    <section class="grid-produtos">
+      @for (item of produtos(); track item.nome) {
+        <app-produto
+          [nome]="item.nome"
+          [preco]="item.preco"
+          (produtoSelecionado)="exibirProduto($event)"
+          (adicionarProdutoAoCarrinho)="adicionarAoCarrinho($event)"
+        >
+        </app-produto>
+      }
+    </section>
+  </section>
+}

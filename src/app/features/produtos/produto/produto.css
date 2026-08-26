@@ -1,0 +1,10 @@
+.produto {
+  margin: 8px;
+  height: 100%;
+}
+mat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}

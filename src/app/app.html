@@ -1,2 +1,11 @@
-<h1>Minha Loja</h1>
-<app-produto></app-produto>
+<app-header></app-header>
+
+<main class="classe-principal">
+  <section class="bloco-controle">
+    <button (click)="login()">Logar</button>
+    <button (click)="logout()">Deslogar</button>
+    <p>Meu usuario esta: {{ usuarioLogado() }}</p>
+  </section>
+
+  <router-outlet></router-outlet>
+</main>
