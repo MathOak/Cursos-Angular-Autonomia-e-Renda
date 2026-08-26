@@ -10,8 +10,21 @@
   <mat-card-actions>
     <button mat-raised-button (click)="selecionarProduto()">Selecionar</button>
 
-    <button mat-stroked-button color="primary" (click)="adicionarAoCarrinho()">
-      Adicionar ao Carrinho
-    </button>
+    @if (this.itemRepetido()) {
+      <button mat-stroked-button color="primary" routerLink="/carrinho">
+        Ir para o Carrinho
+      </button>
+      <button mat-stroked-button color="primary" routerLink="/checkout">
+        Ir para o Checkout
+      </button>
+    } @else {
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="adicionarAoCarrinho()"
+      >
+        Adicionar ao Carrinho
+      </button>
+    }
   </mat-card-actions>
 </mat-card>

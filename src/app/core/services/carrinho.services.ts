@@ -21,6 +21,10 @@ export class CarrinhoService {
   public adicionar(produto: CarrinhoType) {
     this.carrinho.update((lista) => [...lista, produto]);
   }
+  public deletar(produto: CarrinhoType) {
+    const newList = this.carrinho().filter((item) => item !== produto);
+    this.carrinho.set(newList);
+  }
   public limpar() {
     this.carrinho.set([]);
   }

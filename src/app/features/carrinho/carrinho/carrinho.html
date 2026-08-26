@@ -1,3 +1,15 @@
-<h1>Carrinho</h1>
-<p>Você está na página do carrinho.</p>
-<p>Nas próximas aulas, este carrinho será conectado ao estado global.</p>
+<section>
+  <h2>Carrinho:</h2>
+  @for (item of carrinhoService.itens(); track $index) {
+    <div class="carrinho-itens">
+      <p>{{ item.nome }} - {{ item.preco | currency: 'BRL' }}</p>
+      <button class="carrinho-button" (click)="carrinhoService.deletar(item)">
+        X
+      </button>
+    </div>
+  }
+  <p><strong>Itens no Carrinho:</strong> {{ quantidadeCarrinho() }}</p>
+  <p>
+    <strong>Total do Carrinho:</strong> {{ totalCarrinho() | currency: 'BRL' }}
+  </p>
+</section>

@@ -30,19 +30,5 @@
         </app-produto>
       }
     </section>
-
-    <!-- <button (click)="adicionarProduto()">Adicionar Produto</button>
-  <button (click)="substituirProduto()">Substituir Produto</button> -->
   </section>
 }
-<hr />
-<section>
-  <h2>Carrinho:</h2>
-  @for (item of carrinhoService.itens(); track $index) {
-    <p>{{ item.nome }} - {{ item.preco | currency: 'BRL' }}</p>
-  }
-  <p><strong>Itens no Carrinho:</strong> {{ quantidadeCarrinho() }}</p>
-  <p>
-    <strong>Total do Carrinho:</strong> {{ totalCarrinho() | currency: 'BRL' }}
-  </p>
-</section>
