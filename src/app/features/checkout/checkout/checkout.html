@@ -3,7 +3,47 @@
   <p>
     <input type="text" formControlName="nome" placeholder="Nome" />
   </p>
+  @if (formulario.get('nome')?.touched && formulario.get('nome')?.invalid) {
+    <div class="errors-group">
+      @if (formulario.get('nome')?.errors?.['required']) {
+        <small class="form-error">Nome é obrigatório</small>
+      }
+      @if (formulario.get('nome')?.errors?.['minlength']) {
+        <small class="form-error">Nome deve ter no mínimo 3 caracteres</small>
+      }
+      @if (formulario.get('nome')?.errors?.['numeroInvalido']) {
+        <small class="form-error">Nome não pode conter números</small>
+      }
+    </div>
+  }
   <p><input type="email" formControlName="email" placeholder="E-mail" /></p>
+  @if (formulario.get('email')?.touched && formulario.get('email')?.invalid) {
+    <div class="errors-group">
+      @if (formulario.get('email')?.errors?.['required']) {
+        <small class="form-error">Email é obrigatório</small>
+      }
+      @if (formulario.get('email')?.errors?.['email']) {
+        <small class="form-error">Email inválido</small>
+      }
+    </div>
+  }
+
   <p><input type="text" formControlName="endereco" placeholder="Endereco" /></p>
-  <button type="button" (click)="finalizar()">Finalizar Compra</button>
+  @if (
+    formulario.get('endereco')?.touched && formulario.get('endereco')?.invalid
+  ) {
+    <div class="errors-group">
+      @if (formulario.get('endereco')?.errors?.['required']) {
+        <small class="form-error">Endereço é obrigatório</small>
+      }
+      @if (formulario.get('endereco')?.errors?.['minlength']) {
+        <small class="form-error"
+          >Endereço deve ter no mínimo 5 caracteres</small
+        >
+      }
+    </div>
+  }
+  <button type="button" (click)="finalizar()" [disabled]="formulario.invalid">
+    Finalizar Compra
+  </button>
 </form>

@@ -1,0 +1,7 @@
+.form-error {
+  color: red;
+}
+.errors-group {
+  display: flex;
+  flex-direction: column;
+}
