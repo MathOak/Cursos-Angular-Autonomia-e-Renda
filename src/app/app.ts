@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { usuarioLogado, login, logout } from './core/auth';
 import { Header } from './shared/layout/header/header';
 
 @Component({
@@ -11,7 +10,4 @@ import { Header } from './shared/layout/header/header';
 })
 export class App {
   protected readonly title = signal('projeto-teste');
-  usuarioLogado = usuarioLogado;
-  login = login;
-  logout = logout;
 }

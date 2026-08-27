@@ -1,14 +1,19 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { tap, catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.services';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
   //Token
-  const token = 'fake-jwt-token';
-  const novaReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const token = authService.obterToken();
+  const novaReq = token
+    ? req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    : req;
 
   console.log('Interceptando requisição:', req.url);
   return next(novaReq).pipe(
