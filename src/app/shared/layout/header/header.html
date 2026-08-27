@@ -5,6 +5,7 @@
   <button mat-button routerLink="/produtos">Produto</button>
   <button mat-button routerLink="/carrinho">Carrinho {{ quantidade() }}</button>
   <button mat-button routerLink="/checkout">Checkout</button>
+  <button mat-button routerLink="/admin">Admin</button>
   @if (estaLogado()) {
     <span>{{ usuarioAtual()?.email }}</span>
     <button mat-button type="button" (click)="sair()">Sair</button>

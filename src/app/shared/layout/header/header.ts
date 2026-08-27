@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CarrinhoService } from '../../../core/services/carrinho.services';
 import { AuthService } from '../../../core/services/auth.services';
 
@@ -12,6 +12,7 @@ import { AuthService } from '../../../core/services/auth.services';
   styleUrl: './header.css',
 })
 export class Header {
+  router = inject(Router);
   private carrinhoService = inject(CarrinhoService);
   private authService = inject(AuthService);
   quantidade = this.carrinhoService.quantidade;
@@ -20,5 +21,6 @@ export class Header {
 
   sair() {
     this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 }
