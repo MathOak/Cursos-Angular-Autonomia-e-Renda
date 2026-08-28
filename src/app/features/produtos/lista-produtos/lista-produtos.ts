@@ -2,7 +2,7 @@ import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { CurrencyPipe } from '@angular/common';
 import { ProdutosService } from '../../../core/services/produtos.services';
-import { CarrinhoService } from '../../../core/services/carrinho.services';
+import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { MatButtonModule } from '@angular/material/button';
 
 type ProdutoType = { nome: string; preco: number };
@@ -28,13 +28,13 @@ export class ListaProdutos {
     });
   }
   private produtosService = inject(ProdutosService);
-  carrinhoService = inject(CarrinhoService);
+  carrinhoFacade = inject(CarrinhoFacade);
   carregando = signal(true);
   error = signal<string | null>(null);
   produtos = signal<ProdutoType[]>([]);
   produtoSelecionado = signal<string | null>(null);
-  quantidadeCarrinho = this.carrinhoService.quantidade;
-  totalCarrinho = this.carrinhoService.total;
+  quantidadeCarrinho = this.carrinhoFacade.quantidade;
+  totalCarrinho = this.carrinhoFacade.total;
 
   totalProdutos = computed(() => this.produtos().length);
   valorTotal = computed(() => {
@@ -48,14 +48,14 @@ export class ListaProdutos {
   ];
 
   adicionarAoCarrinho(produto: ProdutoType) {
-    this.carrinhoService.adicionar(produto);
+    this.carrinhoFacade.adicionarProduto(produto);
   }
 
   carregarProdutos() {
     this.error.set(null);
-    /* 
-     Modificando variavel carregando para 
-     informar que estou iniciando uma busca na API 
+    /*
+    Modificando variavel carregando para
+    informar que estou iniciando uma busca na API
     */
     this.carregando.set(true);
 
@@ -76,11 +76,11 @@ export class ListaProdutos {
   }
 
   filtrarNovoProduto() {
-    /* Esta função irá filtar a lista atual de produtos 
-    e irá retornar um objeto novo que 
+    /* Esta função irá filtar a lista atual de produtos
+    e irá retornar um objeto novo que
     não esteja atualmente na lista de produtos */
 
-    /* Caso a lista de produtos não tenha item nenhum 
+    /* Caso a lista de produtos não tenha item nenhum
     ele retorna e adiciona o primeiro item da lista de produtosNovos */
     if (this.produtos().length === 0) return this.produtosNovos[0];
 
@@ -94,7 +94,7 @@ export class ListaProdutos {
       */
       return this.produtosNovos[this.produtos().length];
     }
-    /* Caso nenhuma das condições anteriores sejam aplicadas, 
+    /* Caso nenhuma das condições anteriores sejam aplicadas,
     ele retorna um valor nulo para verificação na inclusão da lista */
     return null;
   }
@@ -121,7 +121,7 @@ export class ListaProdutos {
     de produtos atuais, e verificar o item com nome notebook e fazer
     a alteração de valor */
     const novaLista = this.produtos().map((item) => {
-      /* Verificando cada item da lista, caso o item tenha o 
+      /* Verificando cada item da lista, caso o item tenha o
       nome diferente de notebook ele retorna o item sem alteração */
       if (item.nome !== 'notebook') return item;
 

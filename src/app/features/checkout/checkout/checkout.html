@@ -2,17 +2,17 @@
 @if (compraFinalizada()) {
   <p style="color: green">Compra finalizada com sucesso!</p>
 }
-@if (carrinhoService.carrinhoVazio()) {
+@if (carrinhoFacade.carrinhoVazio()) {
   <p style="color: red">
     Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.
   </p>
 } @else {
   <section>
     <h3>Resumo do pedido</h3>
-    @for (item of carrinhoService.itens(); track $index) {
+    @for (item of carrinhoFacade.itens(); track $index) {
       <p>{{ item.nome }} - R$ {{ item.preco.toFixed(2) }}</p>
     }
-    <h3>Total: R$ {{ carrinhoService.total().toFixed(2) }}</h3>
+    <h3>Total: R$ {{ carrinhoFacade.total().toFixed(2) }}</h3>
   </section>
 }
 

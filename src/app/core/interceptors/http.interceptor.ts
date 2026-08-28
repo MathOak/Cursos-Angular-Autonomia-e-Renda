@@ -1,14 +1,14 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { tap, catchError, throwError } from 'rxjs';
-import { AuthService } from '../services/auth.services';
+import { AuthFacade } from '../facades/auth.facade';
 import { Router } from '@angular/router';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const authService = inject(AuthService);
+  const authFacade = inject(AuthFacade);
   //Token
-  const token = authService.obterToken();
+  const token = authFacade.obterToken();
   const novaReq = token
     ? req.clone({
         setHeaders: {
@@ -32,7 +32,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       // 401 -> ausência de autenticação ou token inválido.
       if (error.status === 401) {
         console.warn('Não autorizado. Faça login novamente.');
-        authService.logout();
+        authFacade.sair();
         router.navigateByUrl('/login');
       }
       // 403 -> usuario autenticado, mas sem permissão.
