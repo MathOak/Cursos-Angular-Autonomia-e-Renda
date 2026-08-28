@@ -4,8 +4,7 @@ import { CurrencyPipe } from '@angular/common';
 import { ProdutosService } from '../../../core/services/produtos.services';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { MatButtonModule } from '@angular/material/button';
-
-type ProdutoType = { nome: string; preco: number };
+import { ItemCarrinhoType } from '../../../core/models/item-carrinho';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -31,7 +30,7 @@ export class ListaProdutos {
   carrinhoFacade = inject(CarrinhoFacade);
   carregando = signal(true);
   error = signal<string | null>(null);
-  produtos = signal<ProdutoType[]>([]);
+  produtos = signal<ItemCarrinhoType[]>([]);
   produtoSelecionado = signal<string | null>(null);
   quantidadeCarrinho = this.carrinhoFacade.quantidade;
   totalCarrinho = this.carrinhoFacade.total;
@@ -47,7 +46,7 @@ export class ListaProdutos {
     { nome: 'teclado', preco: 250.55 },
   ];
 
-  adicionarAoCarrinho(produto: ProdutoType) {
+  adicionarAoCarrinho(produto: ItemCarrinhoType) {
     this.carrinhoFacade.adicionarProduto(produto);
   }
 
@@ -100,7 +99,7 @@ export class ListaProdutos {
   }
 
   adicionarProduto() {
-    let novoproduto: ProdutoType | null = this.filtrarNovoProduto();
+    let novoproduto: ItemCarrinhoType | null = this.filtrarNovoProduto();
 
     /* Caso a minha função retorne um item novo, eu adiciono na lista */
     if (novoproduto) {

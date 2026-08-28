@@ -1,15 +1,49 @@
-<section>
-  <h2>Carrinho:</h2>
-  @for (item of carrinhoService.itens(); track $index) {
-    <div class="carrinho-itens">
-      <p>{{ item.nome }} - {{ item.preco | currency: 'BRL' }}</p>
-      <button class="carrinho-button" (click)="carrinhoService.deletar(item)">
-        X
+<!-- A página /carrinho passa a ser a tela oficial de revisão do pedido. -->
+<section class="pagina-carrinho">
+  <h1>Carrinho</h1>
+  @if (carrinhoFacade.carrinhoVazio()) {
+    <p>Seu carrinho está vazio.</p>
+    <button mat-raised-button color="primary" routerLink="/produtos">
+      Ver produtos
+    </button>
+  } @else {
+    <section class="lista-carrinho">
+      @for (item of carrinhoFacade.itens(); track $index) {
+        <article class="item-carrinho">
+          <div>
+            <h3>{{ item.nome }}</h3>
+            <p>{{ item.preco | currency: 'BRL' }}</p>
+          </div>
+          <button
+            mat-stroked-button
+            color="warn"
+            type="button"
+            (click)="carrinhoFacade.deletar(item)"
+          >
+            Remover
+          </button>
+        </article>
+      }
+    </section>
+    <hr />
+    <section class="resumo-carrinho">
+      <h3>Itens no carrinho: {{ carrinhoFacade.quantidade() }}</h3>
+      <p>total: {{ carrinhoFacade.total() | currency: 'BRL' }}</p>
+    </section>
+    <section class="acoes-carrinho">
+      <button
+        mat-button
+        type="button"
+        (click)="carrinhoFacade.limparCarrinho()"
+      >
+        Limpar carrinho
       </button>
-    </div>
+      <button mat-stroked-button color="primary" routerLink="/produtos">
+        Continuar comprando
+      </button>
+      <button mat-raised-button color="primary" routerLink="/checkout">
+        Ir para checkout
+      </button>
+    </section>
   }
-  <p><strong>Itens no Carrinho:</strong> {{ quantidadeCarrinho() }}</p>
-  <p>
-    <strong>Total do Carrinho:</strong> {{ totalCarrinho() | currency: 'BRL' }}
-  </p>
 </section>
