@@ -1,11 +1,26 @@
-import { computed, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { ItemCarrinhoType } from '../models/item-carrinho';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class CarrinhoService {
   //Estado Global
-  private carrinho = signal<ItemCarrinhoType[]>([]);
-
+  private carrinho = signal<ItemCarrinhoType[]>(this.carregarCarrinhoSalvo());
+  private readonly chaveStorage = 'minha-loja-carrinho';
+  private platformId = inject(PLATFORM_ID);
+  constructor() {
+    // Sempre que o carrinho mudar, a lista atualizada será persistida.
+    effect(() => {
+      this.salvarCarrinho(this.carrinho());
+    });
+  }
   // SELECTORS
   itens = computed(() => this.carrinho());
   public quantidade = computed(() => this.carrinho().length);
@@ -23,5 +38,31 @@ export class CarrinhoService {
   }
   public limpar() {
     this.carrinho.set([]);
+  }
+  // Método auxiliar para impedir uso de localStorage fora do navegador.
+  private estaNoNavegador(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+  // Recupera o carrinho salvo, se existir.
+  private carregarCarrinhoSalvo(): ItemCarrinhoType[] {
+    if (!this.estaNoNavegador()) {
+      return [];
+    }
+    const dadosSalvos = localStorage.getItem(this.chaveStorage);
+    if (!dadosSalvos) {
+      return [];
+    }
+    try {
+      return JSON.parse(dadosSalvos) as ItemCarrinhoType[];
+    } catch {
+      return [];
+    }
+  }
+  // Salva o carrinho atualizado no navegador.
+  private salvarCarrinho(itens: ItemCarrinhoType[]) {
+    if (!this.estaNoNavegador()) {
+      return;
+    }
+    localStorage.setItem(this.chaveStorage, JSON.stringify(itens));
   }
 }
