@@ -1,14 +1,21 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { tap, catchError, throwError } from 'rxjs';
+import { AuthFacade } from '../facades/auth.facade';
+import { Router } from '@angular/router';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  const authFacade = inject(AuthFacade);
   //Token
-  const token = 'fake-jwt-token';
-  const novaReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const token = authFacade.obterToken();
+  const novaReq = token
+    ? req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    : req;
 
   console.log('Interceptando requisição:', req.url);
   return next(novaReq).pipe(
@@ -22,9 +29,16 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     catchError((error) => {
       console.log('ERROR GLOBAL:', error);
-
+      // 401 -> ausência de autenticação ou token inválido.
       if (error.status === 401) {
-        console.warn('Não Autorizado');
+        console.warn('Não autorizado. Faça login novamente.');
+        authFacade.sair();
+        router.navigateByUrl('/login');
+      }
+      // 403 -> usuario autenticado, mas sem permissão.
+      if (error.status === 403) {
+        console.warn('Acesso proibido. Perfil sem permissão.');
+        router.navigateByUrl('/produtos');
       }
       if (error.status === 404) {
         console.warn('Conteudo não encontrado!');
